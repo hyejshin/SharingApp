@@ -1,6 +1,7 @@
 package com.example.shins.sharingapp;
 
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +28,8 @@ public class AllItemsFragment extends Fragment {
         btnAdd.setOnClickListener(new View.OnClickListener() {
               @Override
               public void onClick(View v) {
-                  Toast.makeText(getActivity(), "Add Item", Toast.LENGTH_SHORT).show();
+                  DialogFragment dialog = new AddItemDialogFragment();
+                  dialog.show(getFragmentManager(), "dialog");
               }
           }
         );
