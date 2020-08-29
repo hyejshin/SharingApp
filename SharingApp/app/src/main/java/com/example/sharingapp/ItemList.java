@@ -73,6 +73,7 @@ public class ItemList {
         } catch (FileNotFoundException e) {
             items = new ArrayList<Item>();
         } catch (IOException e) {
+
             items = new ArrayList<Item>();
         }
     }
