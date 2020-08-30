@@ -43,6 +43,11 @@ public class AddContactActivity extends AppCompatActivity {
             return;
         }
 
+        if (!email_str.contains("@")) {
+            email.setError("Must be an email address!");
+            return;
+        }
+
         Contact contact = new Contact(username_str, email_str, null);
 
         contact_list.addContact(contact);

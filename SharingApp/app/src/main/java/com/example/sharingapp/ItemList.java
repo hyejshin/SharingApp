@@ -102,5 +102,15 @@ public class ItemList {
         }
         return selected_items;
     }
+
+    public ArrayList<Contact> getActiveBorrowers() {
+        ArrayList<Contact> activeBorrowers = new ArrayList<Contact>();
+        for (Item i: items) {
+            if (i.getStatus().equals("Borrowed")) {
+                activeBorrowers.add(i.getBorrower());
+            }
+        }
+        return activeBorrowers;
+    }
 }
 

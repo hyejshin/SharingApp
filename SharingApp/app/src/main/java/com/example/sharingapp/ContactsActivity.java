@@ -42,31 +42,31 @@ public class ContactsActivity extends AppCompatActivity {
 
 
         // When contact is long clicked, this starts EditContactActivity
-//        my_contacts.setOnItemLongClickListener(new android.widget.AdapterView.OnItemLongClickListener() {
-//            @Override
-//            public boolean onItemLongClick(AdapterView<?> parent, View view, int pos, long id) {
-//                Contact contact = adapter.getItem(pos);
-//                ArrayList<Contact> active_borrowers = item_list.getActiveBorrowers();
-//                active_borrowers_list.setContacts(active_borrowers);
-//
-//                // Prevent contact from editing an "active" borrower.
-//                if (active_borrowers_list != null) {
-//                    if (active_borrowers_list.hasContact(contact)) {
-//                        CharSequence text = "Cannot edit or delete active borrower!";
-//                        int duration = Toast.LENGTH_SHORT;
-//                        Toast.makeText(context, text, duration).show();
-//                        return true;
-//                    }
-//                }
-//
-//                contact_list.loadContacts(context); // Must load contacts again here
-//                int meta_pos = contact_list.getIndex(contact);
-//                Intent intent = new Intent(context, EditContactActivity.class);
-//                intent.putExtra("position", meta_pos);
-//                startActivity(intent);
-//                return true;
-//            }
-//        });
+        my_contacts.setOnItemLongClickListener(new android.widget.AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int pos, long id) {
+                Contact contact = adapter.getItem(pos);
+                ArrayList<Contact> active_borrowers = item_list.getActiveBorrowers();
+                active_borrowers_list.setContacts(active_borrowers);
+
+                // Prevent contact from editing an "active" borrower.
+                if (active_borrowers_list != null) {
+                    if (active_borrowers_list.hasContact(contact)) {
+                        CharSequence text = "Cannot edit or delete active borrower!";
+                        int duration = Toast.LENGTH_SHORT;
+                        Toast.makeText(context, text, duration).show();
+                        return true;
+                    }
+                }
+
+                contact_list.loadContacts(context); // Must load contacts again here
+                int meta_pos = contact_list.getIndex(contact);
+                Intent intent = new Intent(context, EditContactActivity.class);
+                intent.putExtra("position", meta_pos);
+                startActivity(intent);
+                return true;
+            }
+        });
     }
 
     @Override
@@ -81,6 +81,11 @@ public class ContactsActivity extends AppCompatActivity {
 
     public void addContactActivity(View view) {
         Intent intent = new Intent(this, AddContactActivity.class);
+        startActivity(intent);
+    }
+
+    public void homeActivity(View view) {
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 }

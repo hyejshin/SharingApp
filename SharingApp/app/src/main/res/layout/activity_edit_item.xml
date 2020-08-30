@@ -159,14 +159,12 @@
             android:text="@string/borrower_hint"
             android:textAppearance="@android:style/TextAppearance.Medium"/>
 
-        <EditText
-            android:id="@+id/borrower"
-            android:layout_width="fill_parent"
+        <Spinner
+            android:id="@+id/borrower_spinner"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/borrower_hint"
-            android:inputType="textPersonName"
-            android:textAppearance="@android:style/TextAppearance.Medium"
-            android:maxLength="24" />
+            android:background="@android:drawable/btn_dropdown"
+            android:spinnerMode="dropdown"/>
 
     </LinearLayout>
 

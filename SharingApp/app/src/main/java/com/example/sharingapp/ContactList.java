@@ -88,4 +88,21 @@ public class ContactList {
             e.printStackTrace();
         }
     }
+
+    public boolean hasContact(Contact contact) {
+        for (Contact i : contacts) {
+            if (contact.getId().equals(i.getId())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public ArrayList<String> getAllUsername() {
+        ArrayList<String> allUsername = new ArrayList<String>();
+        for (Contact i : contacts) {
+            allUsername.add(i.getUsername());
+        }
+        return allUsername;
+    }
 }

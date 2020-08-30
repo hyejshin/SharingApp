@@ -14,6 +14,7 @@ public class EditContactActivity extends AppCompatActivity {
     private int REQUEST_CODE = 1;
 
     private ContactList contact_list = new ContactList();
+    Contact contact;
     private Context context;
 
     @Override
@@ -26,6 +27,14 @@ public class EditContactActivity extends AppCompatActivity {
 
         context = getApplicationContext();
         contact_list.loadContacts(context);
+
+        Intent intent = getIntent();
+        int pos = intent.getIntExtra("position", 0);
+
+        contact = contact_list.getContact(pos);
+
+        username.setText(contact.getUsername());
+        email.setText(contact.getEmail());
     }
 
     public void saveContact (View view) {
@@ -43,7 +52,15 @@ public class EditContactActivity extends AppCompatActivity {
             return;
         }
 
-        Contact contact = new Contact(username_str, email_str, null);
+        if (!email_str.contains("@")) {
+            email.setError("Must be an email address!");
+            return;
+        }
+
+        String id = contact.getId();
+        contact_list.deleteContact(contact);
+
+        Contact contact = new Contact(username_str, email_str, id);
 
         contact_list.addContact(contact);
         contact_list.saveContacts(context);
@@ -53,4 +70,12 @@ public class EditContactActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void deleteContact(View view) {
+        contact_list.deleteContact(contact);
+        contact_list.saveContacts(context);
+
+        // End EditItemActivity
+        Intent intent = new Intent(this, ContactsActivity.class);
+        startActivity(intent);
+    }
 }
