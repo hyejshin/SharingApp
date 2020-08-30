@@ -177,10 +177,6 @@ public class EditItemActivity extends AppCompatActivity {
             return;
         }
 
-        if (borrower.equals(null) && !status.isChecked()) {
-            Toast.makeText(this, "No borrower selected", Toast.LENGTH_SHORT).show();
-            return;
-        }
 
         // Reuse the item id
         String id = item.getId();
