@@ -123,8 +123,12 @@ public class EditItemActivity extends AppCompatActivity {
     }
 
     public void deleteItem(View view) {
-        item_list.deleteItem(item);
-        item_list.saveItems(context);
+        DeleteItemCommand deleteItemCommand = new DeleteItemCommand(item_list, item, context);
+        deleteItemCommand.execute();
+        
+        if(!deleteItemCommand.isExecuted()) {
+            return;
+        }
 
         // End EditItemActivity
         Intent intent = new Intent(this, MainActivity.class);
@@ -180,8 +184,6 @@ public class EditItemActivity extends AppCompatActivity {
 
         // Reuse the item id
         String id = item.getId();
-        item_list.deleteItem(item);
-
         Item updated_item = new Item(title_str, maker_str, description_str, dimensions, image, id);
 
         boolean checked = status.isChecked();
@@ -190,8 +192,11 @@ public class EditItemActivity extends AppCompatActivity {
             updated_item.setBorrower(borrower);
         }
 
-        item_list.addItem(updated_item);
-        item_list.saveItems(context);
+        EditItemCommand editItemCommand = new EditItemCommand(item_list, item, updated_item, context);
+        editItemCommand.execute();
+        if(!editItemCommand.isExecuted()) {
+            return;
+        }
 
         // End EditItemActivity
         Intent intent = new Intent(this, MainActivity.class);

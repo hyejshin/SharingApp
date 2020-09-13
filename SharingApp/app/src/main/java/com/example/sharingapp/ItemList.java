@@ -78,7 +78,7 @@ public class ItemList {
         }
     }
 
-    public void saveItems(Context context) {
+    public boolean saveItems(Context context) {
         try {
             FileOutputStream fos = context.openFileOutput(FILENAME, 0);
             OutputStreamWriter osw = new OutputStreamWriter(fos);
@@ -88,9 +88,12 @@ public class ItemList {
             fos.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+            return false;
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
+        return true;
     }
 
     public ArrayList<Item> filterItemsByStatus(String status){
