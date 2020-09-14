@@ -125,7 +125,7 @@ public class EditItemActivity extends AppCompatActivity {
     public void deleteItem(View view) {
         DeleteItemCommand deleteItemCommand = new DeleteItemCommand(item_list, item, context);
         deleteItemCommand.execute();
-        
+
         if(!deleteItemCommand.isExecuted()) {
             return;
         }

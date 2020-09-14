@@ -58,12 +58,13 @@ public class EditContactActivity extends AppCompatActivity {
         }
 
         String id = contact.getId();
-        contact_list.deleteContact(contact);
+        Contact updatedContact = new Contact(username_str, email_str, id);
 
-        Contact contact = new Contact(username_str, email_str, id);
-
-        contact_list.addContact(contact);
-        contact_list.saveContacts(context);
+        EditContactCommand editContactCommand = new EditContactCommand(contact_list, contact, updatedContact, context);
+        editContactCommand.execute();
+        if(!editContactCommand.isExecuted()) {
+            return;
+        }
 
         // End AddItemActivity
         Intent intent = new Intent(this, ContactsActivity.class);
@@ -71,8 +72,12 @@ public class EditContactActivity extends AppCompatActivity {
     }
 
     public void deleteContact(View view) {
-        contact_list.deleteContact(contact);
-        contact_list.saveContacts(context);
+        DeleteContactCommand deleteContactCommand = new DeleteContactCommand(contact_list, contact, context);
+        deleteContactCommand.execute();
+
+        if(!deleteContactCommand.isExecuted()){
+            return;
+        }
 
         // End EditItemActivity
         Intent intent = new Intent(this, ContactsActivity.class);

@@ -50,8 +50,11 @@ public class AddContactActivity extends AppCompatActivity {
 
         Contact contact = new Contact(username_str, email_str, null);
 
-        contact_list.addContact(contact);
-        contact_list.saveContacts(context);
+        AddContactCommand addContactCommand = new AddContactCommand(contact_list, contact, context);
+        addContactCommand.execute();
+        if(!addContactCommand.isExecuted()) {
+            return;
+        }
 
         // End AddItemActivity
         Intent intent = new Intent(this, ContactsActivity.class);
