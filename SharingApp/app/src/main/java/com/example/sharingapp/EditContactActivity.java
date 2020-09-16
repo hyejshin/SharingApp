@@ -7,15 +7,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 
-public class EditContactActivity extends AppCompatActivity {
+import java.util.logging.Logger;
+
+public class EditContactActivity extends AppCompatActivity implements Observer {
 
     private EditText username;
     private EditText email;
     private int REQUEST_CODE = 1;
 
     private ContactList contact_list = new ContactList();
+    private ContactListController contactListController = new ContactListController(contact_list);
     Contact contact;
+    private ContactController contactController;
     private Context context;
+    private boolean on_create_update = false;
+    private int pos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,15 +32,18 @@ public class EditContactActivity extends AppCompatActivity {
         email = (EditText) findViewById(R.id.email);
 
         context = getApplicationContext();
-        contact_list.loadContacts(context);
 
         Intent intent = getIntent();
-        int pos = intent.getIntExtra("position", 0);
+        pos = intent.getIntExtra("position", 0);
 
-        contact = contact_list.getContact(pos);
 
-        username.setText(contact.getUsername());
-        email.setText(contact.getEmail());
+        on_create_update = true;
+        contactListController.addObserver(this);
+        contactListController.loadContacts(context);
+        on_create_update = false;
+
+        username.setText(contactController.getUsername());
+        email.setText(contactController.getEmail());
     }
 
     public void saveContact (View view) {
@@ -57,12 +66,11 @@ public class EditContactActivity extends AppCompatActivity {
             return;
         }
 
-        String id = contact.getId();
+        String id = contactController.getId();
         Contact updatedContact = new Contact(username_str, email_str, id);
 
-        EditContactCommand editContactCommand = new EditContactCommand(contact_list, contact, updatedContact, context);
-        editContactCommand.execute();
-        if(!editContactCommand.isExecuted()) {
+        boolean success = contactListController.editContact(contact, updatedContact, context);
+        if(!success) {
             return;
         }
 
@@ -72,15 +80,28 @@ public class EditContactActivity extends AppCompatActivity {
     }
 
     public void deleteContact(View view) {
-        DeleteContactCommand deleteContactCommand = new DeleteContactCommand(contact_list, contact, context);
-        deleteContactCommand.execute();
 
-        if(!deleteContactCommand.isExecuted()){
+        boolean success = contactListController.deleteContact(contact, context);
+        if(!success){
             return;
         }
 
         // End EditItemActivity
         Intent intent = new Intent(this, ContactsActivity.class);
         startActivity(intent);
+    }
+
+    public void update() {
+        System.out.print("update");
+        if (on_create_update) {
+            System.out.print("updated!!");
+            contact = contactListController.getContact(pos);
+            contactController = new ContactController(contact);
+        }
+    }
+
+    protected void onDestroy() {
+        super.onDestroy();
+        contactListController.removeObserver(this);
     }
 }

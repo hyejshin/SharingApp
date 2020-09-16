@@ -36,6 +36,7 @@ public class ItemAdapter extends ArrayAdapter<Item> {
         // Note: getItem() is not a user-defined method in the Item/ItemList class!
         // The "Item" in the method name is a coincidence...
         Item item = getItem(position);
+        ItemController itemController = new ItemController(item);
 
         String title = "Title: " + item.getTitle();
         String description = "Description: " + item.getDescription();

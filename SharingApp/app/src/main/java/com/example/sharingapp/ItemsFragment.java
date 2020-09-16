@@ -16,9 +16,11 @@ import java.util.ArrayList;
 /**
  * Superclass of AvailableItemsFragment, BorrowedItemsFragment and AllItemsFragment
  */
-public abstract class ItemsFragment extends Fragment {
+public abstract class ItemsFragment extends Fragment implements Observer{
 
     ItemList item_list = new ItemList();
+    ItemListController itemListController = new ItemListController(item_list);
+
     View rootView = null;
     private ListView list_view = null;
     private ArrayAdapter<Item> adapter = null;
@@ -26,12 +28,16 @@ public abstract class ItemsFragment extends Fragment {
     private LayoutInflater inflater;
     private ViewGroup container;
     private Context context;
+    private Fragment fragment;
+    private boolean update = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         context = getContext();
-        item_list.loadItems(context);
+        itemListController.loadItems(context);
+        update = true;
+
         this.inflater = inflater;
         this.container = container;
 
@@ -44,10 +50,14 @@ public abstract class ItemsFragment extends Fragment {
         selected_items = filterItems();
     }
 
-    public void setAdapter(Fragment fragment){
-        adapter = new ItemAdapter(context, selected_items, fragment);
-        list_view.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+    public void loadItems(Fragment fragment){
+        this.fragment = fragment;
+        itemListController.addObserver(this);
+        itemListController.loadItems(context);
+    }
+
+
+    public void setFragmentOnItemLongClickListener(){
 
         // When item is long clicked, this starts EditItemActivity
         list_view.setOnItemLongClickListener(new android.widget.AdapterView.OnItemLongClickListener() {
@@ -57,7 +67,7 @@ public abstract class ItemsFragment extends Fragment {
 
                 Item item = adapter.getItem(pos);
 
-                int meta_pos = item_list.getIndex(item);
+                int meta_pos = itemListController.getIndex(item);
                 if (meta_pos >= 0) {
 
                     Intent edit = new Intent(context, EditItemActivity.class);
@@ -74,5 +84,14 @@ public abstract class ItemsFragment extends Fragment {
      * @return selected_items
      */
     public abstract ArrayList<Item> filterItems();
+
+    public void update() {
+        if (update) {
+            adapter = new ItemAdapter(context, selected_items, fragment);
+            list_view.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+        }
+
+    }
 
 }
